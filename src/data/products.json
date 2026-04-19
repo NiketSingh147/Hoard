@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "title": "Kids Doll LED Night Lamp",
+    "price": 499,
+    "originalPrice": 999,
+    "discount": "50% OFF",
+    "image": "/images/hero1.webp"
+  },
+  {
+    "id": 2,
+    "title": "Smart LED Night Lamp",
+    "price": 599,
+    "originalPrice": 1199,
+    "discount": "50% OFF",
+    "image": "/images/hero2.webp",
+    "bestseller": true
+  },
+  {
+    "id": 3,
+    "title": "Color Changing LED Night Lamp",
+    "price": 399,
+    "originalPrice": 799,
+    "discount": "50% OFF",
+    "image": "/images/hero3.webp"
+  },
+  {
+    "id": 4,
+    "title": "Animal Shaped LED Night Lamp",
+    "price": 449,
+    "originalPrice": 899,
+    "discount": "50% OFF",
+    "image": "/images/hero4.webp",
+    "bestseller": true
+  },
+  {
+    "id": 5,
+    "title": "Starry Sky LED Night Lamp",
+    "price": 549,
+    "originalPrice": 1099,
+    "discount": "50% OFF",
+    "image": "/images/hero5.webp"
+  },   
+  {
+    "id": 6,
+    "title": "Moon Shaped LED Night Lamp",
+    "price": 499,
+    "originalPrice": 999,
+    "discount": "50% OFF",
+    "image": "/images/hero6.webp",
+    "bestseller": true
+  }
+
+
+]

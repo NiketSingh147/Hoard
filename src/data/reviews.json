@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Aarav Sharma",
+    "date": "March 2026",
+    "rating": 5,
+    "image": "/reviews/review1.webp",
+    "review": "Absolutely loved this night lamp! The glow is soft and perfect for my room."
+  },
+  {
+    "id": 2,
+    "name": "Priya Verma",
+    "date": "Feb 2026",
+    "rating": 4,
+    "image": "/reviews/review2.webp",
+    "review": "Great quality and beautiful design. Worth the price!"
+  },
+  {
+    "id": 3,
+    "name": "Rohit Singh",
+    "date": "Jan 2026",
+    "rating": 5,
+    "image": "/reviews/review3.webp",
+    "review": "Gives such a cozy vibe at night. Highly recommended!"
+  },
+  {
+    "id": 4,
+    "name": "Ananya Gupta",
+    "date": "Dec 2025",
+    "rating": 4,
+    "image": "/reviews/review4.webp",
+    "review": "The lamp is beautiful and works well. Just wish it had more color options."
+  },
+  {
+    "id": 5,
+    "name": "Karan Mehta",
+    "date": "Nov 2025",
+    "rating": 5,
+    "image": "/reviews/review5.webp",
+    "review": "Perfect for my bedside table. The light is just right for reading."
+  },
+  {
+    "id": 6,
+    "name": "Sanya Kapoor",
+    "date": "Oct 2025",
+    "rating": 4,
+    "image": "/reviews/review6.webp",
+    "review": "The design is stunning and it creates a lovely ambiance. Very happy with my purchase!"
+  }
+]
