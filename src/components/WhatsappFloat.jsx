@@ -11,8 +11,8 @@ function WhatsappFloat() {
       <div className="flex items-center gap-2">
 
         {/* Text */}
-        <span className="hidden md:block bg-white/10 backdrop-blur-md border border-white/10
-        text-white text-sm px-4 py-2 rounded-full shadow-md
+        <span className="hidden md:block bg-[var(--surface)] backdrop-blur-md border border-[var(--border)]
+        text-[var(--text)] text-sm px-4 py-2 rounded-full shadow-md
         opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0
         transition-all duration-300">
           Chat with us

@@ -1,6 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --bg: #000000;
+  --surface: rgba(255, 255, 255, 0.05);
+  --nav-surface: rgba(255, 255, 255, 0.05);
+  --offer-surface: rgba(255, 255, 255, 0.05);
+  --text: #ffffff;
+  --muted: #9ca3af;
+  --primary: #a855f7;
+  --accent: rgba(168, 85, 247, 0.12);
+  --card: var(--surface);
+  --footer-bg: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] {
+  --bg: rgb(20, 23, 30);
+  --surface: rgba(255, 255, 255, 0.05);
+  --nav-surface: rgba(255, 255, 255, 0.05);
+  --offer-surface: rgba(255, 255, 255, 0.05);
+  --text: #ffffff;
+  --muted: #9ca3af;
+  --primary: #a855f7;
+  --accent: rgba(168, 85, 247, 0.12);
+  --card: var(--surface);
+  --footer-bg: #0c0c0c;
+  --border: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="orange"] {
+  --bg: #efe2d5;
+  --surface: #ffffff;
+  --nav-surface: rgb(244 94 41 / 90%);
+  --offer-surface: rgb(244 94 41 / 90%);
+  --text: #111111;
+  --muted: #374151;
+  --primary: #f45e29;
+  --accent: rgba(244, 94, 41, 0.16);
+  --card: var(--surface);
+  --footer-bg: rgb(0 0 0 / 81%);
+  --border: rgba(0, 0, 0, 0.08);
+}
+
 @keyframes slideIn {
   from {
     transform: translateX(-100%);

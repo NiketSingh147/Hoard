@@ -7,7 +7,7 @@ const offers = [
   "⚡ Limited Time Deal – Shop Now",
 ];
 
-function OfferBar() {
+function OfferBar({ themeName }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -20,8 +20,15 @@ function OfferBar() {
 
   return (
     <div className="fixed bottom-0 left-0 w-full z-[60]">
-<div className="bg-white/10 backdrop-blur-md border-t border-white/10
-text-white py-1 md:py-2 px-3 md:px-4 shadow-md overflow-hidden">
+<div
+className="backdrop-blur-md border-t border-white/10
+py-1 md:py-2 px-3 md:px-4 shadow-md overflow-hidden"
+style={{
+  backgroundColor:
+    themeName === "orange" ? "rgb(244 94 41 / 45%)" : "var(--offer-surface)",
+  color: themeName === "orange" ? "#111111" : "#ffffff",
+}}
+>
 
     <div className="whitespace-nowrap flex items-center justify-center relative h-6 md:h-5">
 

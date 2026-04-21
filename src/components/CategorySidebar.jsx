@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import categoriesMenu from "../data/categoriesMenu";
+import categories from "../data/categories";
 
 function CategorySidebar() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -10,28 +10,28 @@ function CategorySidebar() {
   };
 
   return (
-    <aside className="hidden lg:block w-[260px] h-[calc(100vh-100px)] sticky top-24 p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl">
+    <aside className="hidden lg:block w-[260px] h-[calc(100vh-100px)] sticky top-24 p-4 bg-[var(--surface)] backdrop-blur-xl border border-[var(--border)] rounded-xl">
 
-      <h3 className="text-lg font-stencil mb-4 text-white">
+      <h3 className="text-lg font-stencil mb-4 text-[var(--text)]">
         Categories
       </h3>
 
       <div className="space-y-3">
-        {categoriesMenu.map((cat, i) => (
+        {categories.map((cat, i) => (
           <div key={i}>
 
             {/* Parent */}
             <button
               onClick={() => toggle(i)}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left text-sm hover:bg-purple-500/10 transition group"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left text-sm hover:bg-[var(--accent)] transition group"
             >
-              <span className="group-hover:text-purple-400">
-                {cat.title}
+              <span className="group-hover:text-[var(--primary)]">
+                {cat.name}
               </span>
 
               <ChevronDown
                 className={`w-4 h-4 transition ${
-                  openIndex === i ? "rotate-180 text-purple-400" : ""
+                  openIndex === i ? "rotate-180 text-[var(--primary)]" : ""
                 }`}
               />
             </button>
@@ -43,13 +43,13 @@ function CategorySidebar() {
               }`}
             >
               <div className="pl-4 space-y-2">
-                {cat.items.map((item, idx) => (
+                {cat.subcategories.map((item, idx) => (
                   <a
                     key={idx}
                     href="#"
-                    className="block text-xs text-gray-400 hover:text-purple-400 transition"
+                    className="block text-xs text-[var(--muted)] hover:text-[var(--primary)] transition"
                   >
-                    {item}
+                    {item.name}
                   </a>
                 ))}
               </div>
