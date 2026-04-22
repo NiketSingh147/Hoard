@@ -6,7 +6,7 @@ function WhatsappFloat() {
       href="https://wa.me/919958705898"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-14 right-6 z-50 group"
+      className="fixed bottom-28 lg:bottom-14 right-6 z-50 group"
     >
       <div className="flex items-center gap-2">
 

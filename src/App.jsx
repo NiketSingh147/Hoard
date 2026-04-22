@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import HeroSlider from "./components/HeroSlider";
@@ -7,13 +8,22 @@ import Categories from "./components/Categories";
 import Footer from "./components/Footer";
 import WhatsappFloat from "./components/WhatsappFloat";
 import OfferBar from "./components/OfferBar";
+import BottomNav from "./components/BottomNav";
 import Reviews from "./components/Reviews";
 import CategoryPage from "./components/CategoryPage";
+import CartPage from "./components/CartPage";
+import ProductDetailPage from "./components/ProductDetailPage";
 import { themes } from "./theme/themes";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
-  const [currentTheme, setCurrentTheme] = useState("dark");
+  const [currentTheme, setCurrentTheme] = useState("orange");
+  const location = useLocation();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.pathname]);
 
   const toggleTheme = () => {
     setCurrentTheme((prev) => (prev === "dark" && themes.orange ? "orange" : "dark"));
@@ -43,14 +53,19 @@ function App() {
               </>
             }
           />
+          <Route path="/category/:categorySlug" element={<CategoryPage />} />
           <Route path="/category/:categorySlug/:subSlug" element={<CategoryPage />} />
+          <Route path="/:categorySlug" element={<CategoryPage />} />
           <Route path="/:categorySlug/:subSlug" element={<CategoryPage />} />
+          <Route path="/product/:productId" element={<ProductDetailPage />} />
+          <Route path="/cart" element={<CartPage />} />
         </Routes>
       </div>
 
       <WhatsappFloat />
+      <BottomNav />
       <OfferBar themeName={currentTheme} />
-      <div className="h-20"></div>
+      <div className="h-28 lg:h-20"></div>
       <Footer themeName={currentTheme} />
 
     </div>

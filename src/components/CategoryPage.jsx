@@ -1,58 +1,129 @@
 import { useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import categories from "../data/categories";
+import { useParams } from "react-router-dom";
+import {
+  getCategoryBySlug,
+  getSubcategoryBySlug,
+  getCategoryProducts,
+  getSubcategoryProducts,
+  getAllProducts,
+} from "../data/categories";
 import ProductCard from "./ProductCard";
+import Breadcrumbs from "./Breadcrumbs";
+import { useEffect, useState } from "react";
+import { useCart } from "../context/CartContext";
 
 function CategoryPage() {
   const { categorySlug, subSlug } = useParams();
-  const navigate = useNavigate();
+  const { cartItems } = useCart();
+  const [gridCols, setGridCols] = useState(2);
+  const [activeSuggestionId, setActiveSuggestionId] = useState(null);
 
-  const selection = useMemo(() => {
-    const category = categories.find((item) => item.slug === categorySlug);
-    if (!category) return null;
+  const category = useMemo(() => getCategoryBySlug(categorySlug), [categorySlug]);
+  const subcategory = useMemo(
+    () => (subSlug ? getSubcategoryBySlug(categorySlug, subSlug) : null),
+    [categorySlug, subSlug],
+  );
 
-    const subcategory = category.subcategories.find((item) => item.slug === subSlug);
-    if (!subcategory) return null;
+  const products = useMemo(() => {
+    if (!category) return [];
+    if (subSlug) return getSubcategoryProducts(categorySlug, subSlug);
+    return getCategoryProducts(categorySlug);
+  }, [category, categorySlug, subSlug]);
 
-    return { category, subcategory };
-  }, [categorySlug, subSlug]);
+  useEffect(() => {
+    const updateCols = () => {
+      if (window.innerWidth >= 1024) setGridCols(4);
+      else if (window.innerWidth >= 768) setGridCols(3);
+      else setGridCols(2);
+    };
+    updateCols();
+    window.addEventListener("resize", updateCols);
+    return () => window.removeEventListener("resize", updateCols);
+  }, []);
 
-  const products = selection?.subcategory.products ?? [];
+  useEffect(() => {
+    if (!activeSuggestionId) return;
+    const stillInCart = cartItems.some((item) => item.id === activeSuggestionId);
+    if (!stillInCart) {
+      setActiveSuggestionId(null);
+    }
+  }, [activeSuggestionId, cartItems]);
+
+  const sourceIndex = products.findIndex((item) => item.id === activeSuggestionId);
+  const rowEndIndex =
+    sourceIndex >= 0
+      ? Math.min(Math.floor(sourceIndex / gridCols) * gridCols + gridCols - 1, products.length - 1)
+      : -1;
+
+  const suggestions = useMemo(() => {
+    if (!activeSuggestionId) return [];
+    const source = products.find((item) => item.id === activeSuggestionId);
+    if (!source) return [];
+
+    return getAllProducts()
+      .filter((item) => item.id !== source.id)
+      .sort((a, b) => {
+        const aScore = Number(a.categorySlug === source.categorySlug) + Number(a.subcategorySlug === source.subcategorySlug);
+        const bScore = Number(b.categorySlug === source.categorySlug) + Number(b.subcategorySlug === source.subcategorySlug);
+        return bScore - aScore;
+      })
+      .slice(0, 10);
+  }, [activeSuggestionId, products]);
+
+  if (!category || (subSlug && !subcategory)) {
+    return (
+      <section className="px-4 md:px-8 py-16 bg-[var(--bg)] text-[var(--text)] min-h-[55vh]">
+        <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Categories", to: "/" }, { label: "Not Found" }]} />
+        <h2 className="text-3xl md:text-4xl tracking-wide font-bold text-center mb-3 font-stencil">
+          Category Not Found
+        </h2>
+        <p className="text-center text-sm md:text-base text-[var(--muted)]">
+          Please choose a valid category or subcategory.
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="px-4 md:px-8 py-16 bg-[var(--bg)] text-[var(--text)]">
-      <div className="flex items-center justify-between mb-8">
-        <button
-          onClick={() => navigate("/")}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-lg 
-          text-sm md:text-base font-medium transition duration-300
-          bg-[var(--surface)] border border-[var(--border)]
-          hover:shadow-lg hover:border-[var(--primary)]
-          [data-theme='dark']&:hover:shadow-[0_8px_16px_rgba(168,85,247,0.2)]
-          [data-theme='orange']&:hover:shadow-[0_8px_16px_rgba(244,94,41,0.15)]
-          text-[var(--text)]"
-        >
-          <span>←</span>
-          <span>Back to Home</span>
-        </button>
-      </div>
-
-      {/* {selection && (
-        <p className="text-xs md:text-sm text-[var(--muted)] opacity-40 mb-6 font-light tracking-wide">
-          Home / {selection.category.name} / {selection.subcategory.name}
-        </p>
-      )} */}
+      <Breadcrumbs
+        items={[
+          { label: "Home", to: "/" },
+          { label: "Categories", to: "/" },
+          { label: category.name, to: `/${category.slug}` },
+          ...(subcategory ? [{ label: subcategory.name, to: `/${category.slug}/${subcategory.slug}` }] : []),
+        ]}
+      />
 
       <h2 className="text-3xl md:text-4xl tracking-wide font-bold text-center mb-3 font-stencil">
-        {selection ? selection.subcategory.name : "Category Not Found"}
+        {subcategory ? subcategory.name : category.name}
       </h2>
       <p className="text-center text-sm md:text-base text-[var(--muted)] mb-10">
-        {selection ? selection.category.name : "Please choose a valid category from the navbar."}
+        {subcategory
+          ? `From ${category.name} (${products.length} products)`
+          : `${category.name} Collection (${products.length} products)`}
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
-        {products.map((item) => (
-          <ProductCard key={item.id} {...item} />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-7xl mx-auto">
+        {products.map((item, index) => (
+          <div key={`${item.id}-${item.subcategorySlug}`} className="contents">
+            <ProductCard {...item} onProductAdded={(product) => setActiveSuggestionId(product.id)} />
+            {index === rowEndIndex && suggestions.length > 0 && (
+              <div
+                className="col-span-full rounded-2xl border border-[var(--border)] p-3 md:p-4 lg:p-5 mt-1 transition-all duration-300 ease-out"
+                style={{ backgroundColor: "color-mix(in srgb, var(--primary) 12%, transparent)" }}
+              >
+                <h3 className="text-lg md:text-xl font-semibold mb-3">✨ You May Also Like</h3>
+                <div className="flex gap-3 md:gap-4 overflow-x-auto pb-2 snap-x">
+                  {suggestions.map((suggestion) => (
+                    <div key={`suggest-${suggestion.id}`} className="min-w-[210px] sm:min-w-[230px] md:min-w-[250px] snap-start">
+                      <ProductCard {...suggestion} onProductAdded={(product) => setActiveSuggestionId(product.id)} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         ))}
       </div>
     </section>

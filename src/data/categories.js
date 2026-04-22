@@ -1,3 +1,5 @@
+import { getProductMeta } from "./productMeta";
+
 const categories = [
   {
     name: "Night Lights",
@@ -8,10 +10,11 @@ const categories = [
       {
         name: "Hexagon",
         slug: "hexagon",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 1,
-            title: "Hexagon LED Night Lamp",
+            title: "Hexagon LED Night Lamp bada text likho bhai sabahabshsjj",
             price: 499,
             originalPrice: 999,
             discount: "50% OFF",
@@ -37,6 +40,7 @@ const categories = [
       {
         name: "Square",
         slug: "square",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 3,
@@ -66,6 +70,7 @@ const categories = [
       {
         name: "Circle",
         slug: "circle",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 5,
@@ -102,6 +107,7 @@ const categories = [
       {
         name: "Boys",
         slug: "boys",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 7,
@@ -131,12 +137,19 @@ const categories = [
       {
         name: "Girls",
         slug: "girls",
+            image: "/images/hero3.webp",
         products: [
           {
+            id: 8,
+            title: "Princess Castle Night Lamp",
+            price: 559,
+            originalPrice: 1099,
+            discount: "49% OFF",
+            image: "/images/hero3.webp",
             images: ["/images/hero3.webp", "/images/hero3.webp"],
             rating: 4.5,
             reviewCount: 734,
-            bestseller: true,
+            
           },
           {
             id: 17,
@@ -161,6 +174,7 @@ const categories = [
       {
         name: "Lord Ganesh",
         slug: "lord-ganesh",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 9,
@@ -189,6 +203,7 @@ const categories = [
       {
         name: "Lord Krishna",
         slug: "lord-krishna",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 10,
@@ -217,6 +232,7 @@ const categories = [
       {
         name: "Durga Ji",
         slug: "durga-ji",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 11,
@@ -252,6 +268,7 @@ const categories = [
       {
         name: "All MiniAura",
         slug: "all-miniaura",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 12,
@@ -260,7 +277,7 @@ const categories = [
             originalPrice: 899,
             discount: "48% OFF",
             image: "/images/hero3.webp",
-            bestseller: true,
+            
           },
           {
             id: 21,
@@ -282,6 +299,7 @@ const categories = [
       {
         name: "Motion",
         slug: "motion",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 13,
@@ -298,13 +316,14 @@ const categories = [
             originalPrice: 1449,
             discount: "48% OFF",
             image: "/images/hero3.webp",
-            bestseller: true,
+            
           },
         ],
       },
       {
         name: "Auto On/Off",
         slug: "auto-on-off",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 14,
@@ -327,6 +346,7 @@ const categories = [
       {
         name: "Energy Saver",
         slug: "energy-saver",
+            image: "/images/hero3.webp",
         products: [
           {
             id: 15,
@@ -355,6 +375,7 @@ export const getAllProducts = () =>
     category.subcategories.flatMap((subcategory) =>
       subcategory.products.map((product) => ({
         ...product,
+        ...getProductMeta(product),
         categorySlug: category.slug,
         categoryName: category.name,
         subcategorySlug: subcategory.slug,
@@ -364,12 +385,25 @@ export const getAllProducts = () =>
   );
 
 export const getProductsBySelection = (activeCategorySlug, activeSubcategorySlug) => {
-  if (!activeCategorySlug || !activeSubcategorySlug) {
+  if (!activeCategorySlug) {
     return getAllProducts();
   }
 
   const category = categories.find((item) => item.slug === activeCategorySlug);
   if (!category) return [];
+
+  if (!activeSubcategorySlug) {
+    return category.subcategories.flatMap((subcategory) =>
+      subcategory.products.map((product) => ({
+        ...product,
+        ...getProductMeta(product),
+        categorySlug: category.slug,
+        categoryName: category.name,
+        subcategorySlug: subcategory.slug,
+        subcategoryName: subcategory.name,
+      })),
+    );
+  }
 
   const subcategory = category.subcategories.find(
     (item) => item.slug === activeSubcategorySlug,
@@ -378,11 +412,30 @@ export const getProductsBySelection = (activeCategorySlug, activeSubcategorySlug
 
   return subcategory.products.map((product) => ({
     ...product,
+    ...getProductMeta(product),
     categorySlug: category.slug,
     categoryName: category.name,
     subcategorySlug: subcategory.slug,
     subcategoryName: subcategory.name,
   }));
 };
+
+export const getCategoryBySlug = (categorySlug) =>
+  categories.find((category) => category.slug === categorySlug) || null;
+
+export const getSubcategoryBySlug = (categorySlug, subSlug) => {
+  const category = getCategoryBySlug(categorySlug);
+  if (!category) return null;
+  return category.subcategories.find((subcategory) => subcategory.slug === subSlug) || null;
+};
+
+export const getCategoryProducts = (categorySlug) =>
+  getProductsBySelection(categorySlug, null);
+
+export const getSubcategoryProducts = (categorySlug, subSlug) =>
+  getProductsBySelection(categorySlug, subSlug);
+
+export const getProductById = (productId) =>
+  getAllProducts().find((product) => String(product.id) === String(productId)) || null;
 
 export default categories;
